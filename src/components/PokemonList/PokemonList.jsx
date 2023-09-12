@@ -8,13 +8,23 @@ export default function PokemonList() {
 const [pokemonList,setPokemonList] = useState([]);
 const [isLoading, setIsLoading] = useState(true);
 
-const POKEDEX_URL ='https://pokeapi.co/api/v2/pokemon'
+const [pokedexUrl,setPokedexUrl] = useState('https://pokeapi.co/api/v2/pokemon');
+
+const [nextUrl, setNextUrl] =useState('');
+const [prevUrl, setPrevUrl] =useState('');
+
+
 
 async function downloadPokemons(){
-    const response = await axios.get(POKEDEX_URL); // This will download list of 20 Pokemon 
+   setIsLoading(true);
+    const response = await axios.get(pokedexUrl); // This will download list of 20 Pokemon 
     //console.log(response.data);
 
     const pokemonResults = response.data.results;  // We get the array of Pokamon 
+
+    setNextUrl(response.data.next);
+    setPrevUrl(response.data.previous);
+
     //Iterrating over the array of Pokemons, and using their url, to create an array of promises
     // that will download those 20 pokemons
     const pokemonResultPromise = pokemonResults.map( (pokemon)=> axios.get(pokemon.url) );
@@ -30,7 +40,7 @@ async function downloadPokemons(){
         id:pokemon.id,
         name:pokemon.name,
         image:(pokemon.sprites.other) ? pokemon.sprites.other.dream_world.front_default : pokemon.sprites.front_shiny,
-        
+
         type: pokemon.types
        }
     });
@@ -43,20 +53,25 @@ async function downloadPokemons(){
 
 useEffect( ()=>{
   downloadPokemons();
-},[]);
+},[pokedexUrl]);       // When pokedexUrl changes then then Use Effect re-execute
 
   
 
   return (
      <div className='pokemon-list-wrapper'>
-     <div>Pokemon List</div>
-      
-     {
-        
-      (isLoading) ? 'Loading...' : pokemonList.map( (p)=> <Pokemon name={p.name} image={p.image} key={p.id}/> )
+     <div className='title'>Pokemon List</div> 
 
-     }
-     
+      <div className='pokemon-wrapper'> 
+      { 
+          (isLoading) ? 'Loading...' : pokemonList.map( (p)=> <Pokemon name={p.name} image={p.image} key={p.id}/> ) 
+      } 
+      </div> 
+
+      <div className='controls'>
+         <button disabled={prevUrl===null}  onClick={()=>setPokedexUrl(prevUrl)}>Prev</button>
+         <button disabled={nextUrl===null}  onClick={()=>setPokedexUrl(nextUrl)}>Next</button>
+      </div>
+      
      </div>
   )
 }
