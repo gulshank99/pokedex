@@ -1,20 +1,20 @@
-.pokemon-list {
-    display: flex;
-    flex-direction: row;
-    
-    flex-wrap: wrap;
-    justify-content: space-around;
-}
-
 .pokemon-list-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
+.pokemon-wrapper {
+    display: flex;
+    flex-direction: row; 
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
 .controls button {
     padding: 10px 2rem;
     margin-left: 1rem;
+    margin-top: 1rem;   /* Some space from Top  */
     font-weight: bolder;
     border: none;
     background-color: salmon;
