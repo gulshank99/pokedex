@@ -1,7 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Search.css'
+import useDebounce from '../../hooks/useDebounce'
 
-export default function Search() {
+export default function Search( {updateSearchTerm} ) {
+
+ const debouncedCallBack = useDebounce(   (e) =>updateSearchTerm(e.target.value) )
+
   return (
       <div className='search-wrapper'>
         
@@ -10,8 +14,12 @@ export default function Search() {
           type='text'
           placeholder='Pokemon name.......'
           
+          onChange={debouncedCallBack }
+          
         
         />
+
+        
 
       </div>
   )
