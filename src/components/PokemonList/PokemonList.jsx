@@ -53,7 +53,7 @@ async function downloadPokemons(){
 
 useEffect( ()=>{
   downloadPokemons();
-},[pokedexUrl]);       // When pokedexUrl changes then then Use Effect re-execute
+},[pokedexUrl]);       // When pokedexUrl changes then then Use Effect -> re-execute
 
   
 
